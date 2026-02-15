@@ -1,0 +1,14 @@
+# build
+*.exe
+*.out
+*.test
+*.prof
+coverage.out
+coverage.html
+
+# OS junk
+.DS_Store
+
+# Go workspace
+/bin/
+
