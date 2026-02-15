@@ -36,3 +36,9 @@ Returns **405 Method Not Allowed**
 
 ```bash
 go run ./cmd/server
+
+----
+## Tests + Coverage
+go test ./... -coverprofile=coverage.out
+go tool cover -func=coverage.out | tail -n 1
+
