@@ -13,18 +13,22 @@ func buildHandler(dbPath string) (http.Handler, func() error, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	closeFn := func() error { return store.Close() }
+
+	closeFn := func() error {
+		return store.Close()
+	}
+
 	s := handlers.NewServer(store)
 	return s.Routes(), closeFn, nil
 }
 
 func main() {
-	h, closeFn, err := buildHandler("./" + keystore.DBFileName)
+	// DO NOT prefix with "./"
+	h, closeFn, err := buildHandler(keystore.DBFileName)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer func() { _ = closeFn() }()
 
-	log.Println("JWKS server listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", h))
 }
