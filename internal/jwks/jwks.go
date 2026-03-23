@@ -33,4 +33,3 @@ func FromRSAPublicKey(kid string, pub *rsa.PublicKey) JWK {
 		E:   e,
 	}
 }
-

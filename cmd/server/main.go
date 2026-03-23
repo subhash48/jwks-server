@@ -8,15 +8,23 @@ import (
 	"github.com/subhash48/jwks-server/internal/keystore"
 )
 
+func buildHandler(dbPath string) (http.Handler, func() error, error) {
+	store, err := keystore.NewDBStore(dbPath)
+	if err != nil {
+		return nil, nil, err
+	}
+	closeFn := func() error { return store.Close() }
+	s := handlers.NewServer(store)
+	return s.Routes(), closeFn, nil
+}
+
 func main() {
-	store, err := keystore.NewStore()
+	h, closeFn, err := buildHandler("./" + keystore.DBFileName)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	s := handlers.NewServer(store)
+	defer func() { _ = closeFn() }()
 
 	log.Println("JWKS server listening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", s.Routes()))
+	log.Fatal(http.ListenAndServe(":8080", h))
 }
-
