@@ -12,3 +12,4 @@ coverage.html
 # Go workspace
 /bin/
 
+totally_not_my_privateKeys.db
